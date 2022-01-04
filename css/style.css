@@ -158,9 +158,14 @@ nav {
   /* margin-right: 15px; */
   background-color: #fff;
   padding: 10px;
-  color: #00d4ff;
+  /* color: #00d4ff; */
+  color: #000;
   transition: width 0.5s;
   width: 30%;
+}
+
+.button-icon i {
+  mix-blend-mode: lighten;
 }
 
 /* .flag-icon {
