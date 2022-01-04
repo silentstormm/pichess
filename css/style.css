@@ -14,7 +14,7 @@ body {
   width: 100vw;
   height: 100vh;
   background: #00a8ff;
-  background: url('img/bg.png'), linear-gradient(45deg, #00a8ff 0%, #00d4ff 100%);
+  background: url('../img/bg.png'), linear-gradient(45deg, #00a8ff 0%, #00d4ff 100%);
   background-position: center;
   background-size: cover cover;
   color: #ffffff;
@@ -150,14 +150,9 @@ nav {
   /* margin-right: 15px; */
   background-color: #fff;
   padding: 10px;
-  /* color: #00d4ff; */
-  color: #000;
+  color: #00d4ff;
   transition: width 0.5s;
   width: 30%;
-}
-
-.button-icon i {
-  mix-blend-mode: lighten;
 }
 
 /* .flag-icon {
