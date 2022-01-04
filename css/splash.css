@@ -1,0 +1,266 @@
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background: #00a8ff;
+  background-position: center;
+  background-size: cover cover;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  font-family: 'Futura';
+  font-size: 1.5rem;
+}
+
+body,
+input,
+button {
+  font-family: 'Futura';
+  color: #ffffff;
+}
+
+button {
+  cursor: pointer;
+  font-size: 1.5rem;
+  overflow: hidden;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(77, 113, 205, 0.37);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+nav {
+  padding: 10px 15px;
+  font-size: 2rem;
+}
+
+.main {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: max(40vh, 200px);
+  display: grid;
+  grid-template-columns: [game-start] 50% [buttons-start] auto;
+  align-items: center;
+}
+
+.splash {
+  display: grid;
+  width: auto;
+  width: 80vh;
+  min-width: 400px;
+  height: auto;
+  min-height: 400px;  
+  justify-self: end;
+}
+
+.menu {
+  display: grid;
+  grid-column: 1;
+  grid-row: 1;
+  height: 60%;
+  width: 80%;
+  justify-self: center;
+  align-self: center;
+  align-items: flex-end;
+}
+
+.main-menu {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  align-content: space-evenly;
+}
+
+.player-name-entry {
+  height: auto;
+  width: 55%;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+
+.player-name {
+  margin-left: 10px;
+  padding-left: 1rem;
+  width: 100%;
+  height: 2.5rem;
+  font-size: 1.5rem;
+  font-family: 'Futura';
+}
+
+::placeholder {
+  color: #ffffff;
+}
+
+.play-buttons {
+  width: 55%;
+  height: 2.5rem;
+  display: grid;
+  gap: 20px;
+  justify-self: center;
+}
+
+.play-button {
+  align-items: center;
+  justify-self: center;
+  width: 20rem;
+  text-align: center  ;
+}
+
+.play-button-text {
+  position: relative;
+  width: 70%;
+  /* text-align: left; */
+  white-space: nowrap;
+  left: 0;
+}
+
+.statistics {
+  width: 80%;
+  display: flex;
+  justify-self: center;
+  align-self: end;
+  justify-content: space-evenly;
+  font-size: 0.8rem;
+  margin-bottom: 20px;
+}
+
+.statistic {
+  white-space: nowrap;
+}
+
+.split-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 12.5rem;
+}
+
+.button-icon {
+  /* margin-right: 15px; */
+  background-color: #fff;
+  padding: 10px;
+  color: #00d4ff;
+  transition: width 0.5s;
+  width: 30%;
+}
+
+.button-text {
+  position: relative;
+  width: 70%;
+  /* text-align: left; */
+  transition: left 0.5s, width 0.5s;
+  white-space: nowrap;
+  left: 0;
+}
+
+button:hover .button-icon {
+  width: 100%;
+}
+
+button:hover .button-text {
+  width: 0;
+  left: 100%;
+  transition: left 1s, width 0.5s;
+}
+
+.help-toggle {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+
+.board {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  height: 80vh;
+  min-height: 400px;
+  grid-template-columns: repeat(8, 12.5% [col-start]);
+  grid-template-rows: repeat(8, 12.5% [row-start]);
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px 0 rgba(77, 113, 205, 0.37);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.square {
+  background: rgba(75, 89, 216, 0.25);
+}
+
+.square:nth-child(16n),
+.square:nth-child(16n + 1),
+.square:nth-child(16n + 3),
+.square:nth-child(16n + 5),
+.square:nth-child(16n + 7),
+.square:nth-child(16n + 10),
+.square:nth-child(16n + 12),
+.square:nth-child(16n + 14) {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.piece::before {
+  font-family: 'Font Awesome 5 Free';
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  font-weight: 900;
+  font-size: 7vh;
+  padding: 1vh;
+  text-align: center;
+}
+
+.piece-light::before {
+  color: #fff;
+}
+
+.piece-dark::before {
+  color: #070853;
+}
+
+.piece-rook::before {
+  content: '\f447';
+}
+
+.piece-knight::before {
+  content: '\f441';
+}
+
+.piece-bishop::before {
+  content: '\f43a';
+}
+
+.piece-queen::before {
+  content: '\f445';
+}
+
+.piece-king::before {
+  content: '\f43f';
+}
+
+.piece-pawn::before {
+  content: '\f443';
+}
