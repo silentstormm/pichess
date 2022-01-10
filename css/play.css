@@ -1,0 +1,59 @@
+.game {
+  justify-self: end;
+}
+
+.player-info {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10px 0 10px 0;
+}
+
+.p1 {
+  align-items: end;
+}
+
+.p2 {
+  align-items: start;
+}
+
+.info-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.name {
+  background-color: #fff;
+  padding: 10px;
+  color: #00d4ff;
+}
+
+.clock {
+  text-align: end;
+  padding: 10px;
+}
+
+.end-buttons {
+  display: grid;
+  gap: 20px;
+  justify-self: start;
+  margin-left: 20px;
+}
+
+.end-buttons button {
+  width: 12.5rem;
+}
+
+.can-move:not(.piece)::before {
+  color: #0a167f80;
+  font-size: 4vh;
+  content: '\f111';
+}
+
+.can-move.piece::after {
+  color: #0a167f80;
+  content: '\f111';
+  font-size: 8vh;
+}

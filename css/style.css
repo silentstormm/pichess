@@ -40,15 +40,25 @@ button {
 .glass {
   background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 8px 32px 0 rgba(77, 113, 205, 0.37);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   overflow: hidden;
 }
 
 nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
   padding: 10px 15px;
+  z-index: 1000;
+}
+
+.logo {
+  color: #fff;
+  text-decoration: none;
   font-size: 2rem;
 }
 
@@ -63,63 +73,62 @@ nav {
   align-items: center;
 }
 
-.game {
-  width: auto;
+.board {
   width: 80vh;
   min-width: 400px;
-  justify-self: end;
-}
-
-.player-info {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 10px 0 10px 0;
-}
-
-.p1 {
-  align-items: end;
-}
-
-.p2 {
-  align-items: start;
-}
-
-.info-left {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.name {
-  background-color: #fff;
-  padding: 10px;
-  color: #00d4ff;
-}
-
-.clock {
-  text-align: end;
-  padding: 10px;
-}
-
-.board {
-  display: grid;
   height: 80vh;
   min-height: 400px;
+  display: grid;
   grid-template-columns: repeat(8, 12.5% [col-start]);
   grid-template-rows: repeat(8, 12.5% [row-start]);
   border-radius: 40px;
   overflow: hidden;
   box-shadow: 0 8px 32px 0 rgba(77, 113, 205, 0.37);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .square {
   background: rgba(75, 89, 216, 0.25);
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
 }
+
+.square::before {
+  font-family: 'Font Awesome 5 Free';
+  display: inline-block;
+  font-weight: 900;
+  text-align: center;
+}
+
+.square::after {
+  font-family: 'Font Awesome 5 Free';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-weight: 400;
+  text-align: center;
+}
+
+/* .square:nth-child(1) {
+  border-radius: 40px 0 0 0;
+}
+
+.square:nth-child(8) {
+  border-radius: 0 40px 0 0;
+}
+
+.square:nth-child(57) {
+  border-radius: 0 0 0 40px;
+}
+
+.square:nth-child(64) {
+  border-radius: 0 0 40px 0;
+} */
 
 .square:nth-child(16n),
 .square:nth-child(16n + 1),
@@ -132,34 +141,20 @@ nav {
   background: rgba(255, 255, 255, 0.25);
 }
 
-.end-buttons {
-  display: grid;
-  gap: 20px;
-  justify-self: start;
-  margin-left: 20px;
-}
-
-.split-button {
+.split {
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 12.5rem;
 }
 
 .button-icon {
   /* margin-right: 15px; */
   background-color: #fff;
   padding: 10px;
-  color: #00d4ff;
+  color: #00d4ff !important;
   transition: width 0.5s;
-  width: 30%;
+  width: 4rem;
 }
-
-/* .flag-icon {
-  mask: url(#flag);
-  mask-origin: content-box;
-  clip-path: url(#flag);
-} */
 
 .button-text {
   position: relative;
@@ -170,11 +165,21 @@ nav {
   left: 0;
 }
 
-button:hover .button-icon {
+.slide-hover:hover .button-icon {
   width: 100%;
 }
 
-button:hover .button-text {
+.slide-hover:hover .button-text {
+  width: 0;
+  left: 100%;
+  transition: left 1s, width 0.5s;
+}
+
+.slide-hover:active .button-icon {
+  width: 100%;
+}
+
+.slide-hover:active .button-text {
   width: 0;
   left: 100%;
   transition: left 1s, width 0.5s;
@@ -184,6 +189,7 @@ button:hover .button-text {
   position: absolute;
   bottom: 10px;
   right: 10px;
+  width: 12.5rem;
 }
 
 .help {
@@ -197,15 +203,12 @@ button:hover .button-text {
   font-weight: 600;
 }
 
-.piece::before {
-  font-family: 'Font Awesome 5 Free';
-  display: inline-block;
+.piece::before,
+.piece::after {
   width: 100%;
   height: 100%;
-  font-weight: 900;
   font-size: 7vh;
   padding: 1vh;
-  text-align: center;
 }
 
 .piece-light::before {
