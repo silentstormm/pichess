@@ -22,8 +22,11 @@ function gameConstructor(gameID) {
   ]
 
   function pieceInWay(from, to) {
-    let direction = { row: to.row > from.row ? 1 : -1, col: to.col > from.col ? 1 : -1 }
-    for (let i = 1; i < Math.abs(from.row - to.row); i++) {
+    let direction = {
+      row: to.row > from.row ? 1 : to.row < from.row ? -1 : 0,
+      col: to.col > from.col ? 1 : to.col < from.col ? -1 : 0,
+    }
+    for (let i = 1; i < Math.max(Math.abs(from.row - to.row), Math.abs(from.col - to.col)); i++) {
       if (/[kqrnbpKQRNBP]/.test(board[from.row + direction.row * i][from.col + direction.col * i])) return true
     }
     return false
