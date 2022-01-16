@@ -169,28 +169,15 @@ function gameConstructor(gameID) {
       if (player === 'w') time.white = t
       else if (player === 'b') time.black = t
     },
-    hasTwoConnectedPlayers: () => {
-      return gameState === '2 joint'
-    },
-    determinePlayer: (player) => {
-      if (player === playerW) return 'w'
-      else return 'b'
-    },
-    getGameID: () => {
-      return id
-    },
-    getPlayerW: () => {
-      return playerW
-    },
-    getPlayerB: () => {
-      return playerB
-    },
-    getGameState: () => {
-      return gameState
-    },
-    setGameState: (status) => {
-      gameState = status
-    },
+    hasTwoConnectedPlayers: () => gameState === '2 joint',
+    determinePlayer: (player) => (player === playerW ? 'w' : 'b'),
+    getGameID: () => id,
+    getPlayerW: () => playerW,
+    getPlayerB: () => playerB,
+    setPlayerW: (player) => (playerW = player),
+    setPlayerB: (player) => (playerB = player),
+    getGameState: () => gameState,
+    setGameState: (status) => (gameState = status),
   }
 }
 

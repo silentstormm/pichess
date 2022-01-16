@@ -17,6 +17,14 @@
   }
 
   /*
+   * Server to client: game starts
+   */
+  exports.T_GAME_START = 'GAME_START'
+  exports.O_GAME_START = {
+    type: exports.T_GAME_START,
+  }
+
+  /*
    * Player B to server OR server to Player A: guessed character
    */
   exports.T_MOVE = 'MOVE'

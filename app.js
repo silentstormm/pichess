@@ -36,16 +36,22 @@ let connectionID = 0
 
 wss.on('connection', function connection(ws) {
   const con = ws
-  con['id'] = connectionID++
+  con.id = connectionID++
   const playerType = currentGame.addPlayer(con)
-  websockets[con['id']] = currentGame
+  websockets[con.id] = currentGame
 
-  console.log(`Player ${con['id']} placed in game ${currentGame.id} as ${playerType}`)
+  console.log(`Player ${con.id} placed in game ${currentGame.getGameID()} as ${playerType}`)
 
   /*
    * inform the client about its assigned player type
    */
-  con.send(playerType == 'w' ? JSON.stringify(messages.O_PLAYER_W) : JSON.stringify(messages.O_PLAYER_B))
+  if (playerType === 'w') {
+    con.send(JSON.stringify(messages.O_PLAYER_W))
+  } else {
+    con.send(JSON.stringify(messages.O_PLAYER_B))
+    con.send(JSON.stringify(messages.O_GAME_START))
+    currentGame.getPlayerW().send(JSON.stringify(messages.O_GAME_START))
+  }
 
   /*
    * once we have two players, there is no way back;
@@ -65,24 +71,24 @@ wss.on('connection', function connection(ws) {
   con.on('message', (message) => {
     const oMsg = JSON.parse(message.toString())
 
-    const gameObj = websockets[con['id']]
-    const player = gameObj.determinePlayer(con['id'])
+    const gameObj = websockets[con.id]
+    const player = gameObj.determinePlayer(con.id)
 
     if (oMsg.type == messages.T_MOVE) {
       if (gameObj.move(player, oMsg.data.from, oMsg.data.to))
-        player === 'w' ? gameObj.getplayerB.send(message) : gameObj.getplayerW.send(message)
+        player === 'w' ? gameObj.getplayerB().send(message) : gameObj.getplayerW().send(message)
       if (/[wbd]/.test(gameObj.getGameState())) {
         let endMessage = messages.O_GAME_OVER
         endMessage.data = gameObj.getGameState()
-        gameObj.getplayerA.send(JSON.stringify(endMessage))
-        gameObj.getplayerB.send(JSON.stringify(endMessage))
+        gameObj.getplayerW().send(JSON.stringify(endMessage))
+        gameObj.getplayerB().send(JSON.stringify(endMessage))
       }
     }
 
     if (oMsg.type == messages.T_GAME_OVER) {
       gameObj.setGameState(oMsg.data)
-      gameObj.getplayerA.send(message)
-      gameObj.getplayerB.send(message)
+      gameObj.getplayerW().send(message)
+      gameObj.getplayerB().send(message)
       //game was won by somebody, update statistics
       gameStatus.gamesCompleted++
     }
@@ -93,13 +99,13 @@ wss.on('connection', function connection(ws) {
      * code 1001 means almost always closing initiated by the client;
      * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
      */
-    console.log(`${con['id']} disconnected ...`)
+    console.log(`${con.id} disconnected ...`)
 
     if (code == 1001) {
       /*
        * if possible, abort the game; if not, the game is already completed
        */
-      const gameObj = websockets[con['id']]
+      const gameObj = websockets[con.id]
 
       gameObj.endGame(gameObj.determinePlayer() === 'w' ? 'b' : 'w')
       gameStatus.gamesAborted++
@@ -109,15 +115,15 @@ wss.on('connection', function connection(ws) {
        * close it
        */
       try {
-        gameObj.getplayerW.close()
-        gameObj.getplayerW = null
+        gameObj.getplayerW().close()
+        gameObj.setPlayerW(null)
       } catch (e) {
         console.log('Player W closing: ' + e)
       }
 
       try {
-        gameObj.getplayerB.close()
-        gameObj.getplayerB = null
+        gameObj.getplayerB().close()
+        gameObj.setPlayerB(null)
       } catch (e) {
         console.log('Player B closing: ' + e)
       }
