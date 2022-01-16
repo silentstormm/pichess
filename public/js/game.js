@@ -1,4 +1,4 @@
-let GameState = ((ws) => {
+let GameState = (ws) => {
   let socket = ws
   let time = { white: 600, black: 600 }
   let castling = { left: true, right: true }
@@ -16,12 +16,13 @@ let GameState = ((ws) => {
     getColour: () => colour,
     setColour: (c) => (colour = c),
     move: (m) => {
+      console.log(m)
       let msg = Messages.O_MOVE
       msg.data = m
       ws.send(JSON.stringify(msg))
     },
   }
-})()
+}
 
 // setup
 ;(() => {
@@ -32,11 +33,24 @@ let GameState = ((ws) => {
   socket.onmessage = (ev) => {
     let msg = JSON.parse(ev.data)
 
-    if (msg.type === Messages.T_PLAYER_TYPE) {
-      gameState.setColour(msg.data === 'w' ? 'light' : 'dark')
-      if (msg.data === 'b') {
+    switch (msg.type) {
+      case Messages.T_PLAYER_TYPE:
+        gameState.setColour(msg.data === 'w' ? 'light' : 'dark')
+        break
+
+      case Messages.T_GAME_START:
         board.init()
-      }
+        break
+
+      case Messages.T_MOVE:
+        break
+
+      case Messages.T_GAME_OVER:
+        console.log(msg.data)
+        break
+
+      default:
+        break
     }
   }
 })()

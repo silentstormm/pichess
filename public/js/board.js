@@ -4,8 +4,10 @@ const Board = (gs) => {
   let squares = []
 
   function clearGuides() {
-    squares.forEach((square) => {
-      square.classList.remove('can-move')
+    squares.forEach((row) => {
+      row.forEach((square) => {
+        square.classList.remove('can-move')
+      })
     })
   }
 
@@ -19,12 +21,33 @@ const Board = (gs) => {
       for (let i = 0; i < 8; i++) {
         let opposite = gameState.getColour() === 'light' ? 'dark' : 'light'
 
-        squares[0][i].classList.add(`piece-${opposite}`)
-        squares[1][i].classList.add(`piece-${opposite}`, 'piece-pawn')
+        squares[0][i].classList.add('piece', `piece-${opposite}`)
+        squares[1][i].classList.add('piece', `piece-${opposite}`, 'piece-pawn')
 
-        squares[6][i].classList.add(`piece-${opposite}`, 'piece-pawn')
-        squares[7][i].classList.add(`piece-${opposite}`)
+        squares[6][i].classList.add('piece', `piece-${gameState.getColour()}`, 'piece-pawn')
+        squares[7][i].classList.add('piece', `piece-${gameState.getColour()}`)
       }
+
+      squares[0][0].classList.add('piece-rook')
+      squares[0][7].classList.add('piece-rook')
+      squares[7][0].classList.add('piece-rook')
+      squares[7][7].classList.add('piece-rook')
+
+      squares[0][1].classList.add('piece-knight')
+      squares[0][6].classList.add('piece-knight')
+      squares[7][1].classList.add('piece-knight')
+      squares[7][6].classList.add('piece-knight')
+
+      squares[0][2].classList.add('piece-bishop')
+      squares[0][5].classList.add('piece-bishop')
+      squares[7][2].classList.add('piece-bishop')
+      squares[7][5].classList.add('piece-bishop')
+
+      squares[0][3].classList.add('piece-queen')
+      squares[7][3].classList.add('piece-queen')
+
+      squares[0][4].classList.add('piece-king')
+      squares[7][4].classList.add('piece-king')
 
       squares.forEach((row, i) => {
         row.forEach((square, j) => {
@@ -36,13 +59,27 @@ const Board = (gs) => {
               clicked[1] < 8 &&
               square.classList.contains('can-move')
             ) {
+              clearGuides()
               let piece = Array.from(squares[clicked[0]][clicked[1]].classList).find((s) => /piece-[kqrnbp]/.test(s))
 
-              squares[clicked[0]][clicked[1]].classList.remove(piece)
-              squares[i][j].classList.add(piece)
+              squares[clicked[0]][clicked[1]].classList.remove('piece', `piece-${gameState.getColour()}`, piece)
+              squares[i][j].classList.add('piece', `piece-${gameState.getColour()}`, piece)
 
-              gameState.move({ from: { row: clicked[0], col: clicked[1] }, to: { row: i, col: j } })
+              gameState.move(
+                gameState.getColour() === 'light'
+                  ? {
+                      from: { row: clicked[0], col: clicked[1] },
+                      to: { row: i, col: j },
+                    }
+                  : {
+                      from: { row: 7 - clicked[0], col: 7 - clicked[1] },
+                      to: { row: 7 - i, col: 7 - j },
+                    }
+              )
+              return
             }
+
+            clearGuides()
 
             if (Array.from(square.classList).find((s) => /piece-[ld]/.test(s)) !== `piece-${gameState.getColour()}`)
               return

@@ -43,6 +43,10 @@ function gameConstructor(gameID) {
     if (player === 'b' && /[kqrnbp]/.test(dest)) return false
     if (player === 'w' && /[KQRNBP]/.test(dest)) return false
 
+    console.log(
+      `validating move by ${player} with piece ${piece}: from ${JSON.stringify(from)} to ${JSON.stringify(to)}`
+    )
+
     switch (piece) {
       case 'k':
         if (from.row === 0 && from.col === 4 && ((to.row === 0 && to.col === 6) || (to.row === 0 && to.col === 1))) {
@@ -95,7 +99,7 @@ function gameConstructor(gameID) {
         if (pieceInWay(from, to)) return false
         break
       case 'p':
-        if (to.row - from.row !== 1 || to.row - from.row !== 2 || Math.abs(to.col - from.col) > 1) return false
+        if ((to.row - from.row !== 1 && to.row - from.row !== 2) || Math.abs(to.col - from.col) > 1) return false
         if (to.row - format.row === 2 && from.row != 1) return false
         if (
           Math.abs(to.col - from.col) === 1 &&
@@ -105,7 +109,7 @@ function gameConstructor(gameID) {
           return false
         break
       case 'P':
-        if (to.row - from.row !== -1 || to.row - from.row !== -2 || Math.abs(to.col - from.col) > 1) return false
+        if ((to.row - from.row !== -1 && to.row - from.row !== -2) || Math.abs(to.col - from.col) > 1) return false
         if (to.row - format.row === -2 && from.row != -1) return false
         if (
           Math.abs(to.col - from.col) === 1 &&
@@ -120,36 +124,39 @@ function gameConstructor(gameID) {
     return true
   }
 
+  function setGameState(status) {
+    gameState = status
+  }
+
   return {
     getGameState: () => gameState,
-    setGameState: (status) => (gameState = status),
+    setGameState: setGameState,
     move: (player, from, to) => {
-      if (validateMove(player, from, to)) {
-        let piece = board[from.row][from.col]
-        board[from.row][from.col] = ' '
-        let dest = board[to.row][to.col]
-        board[to.row][to.col] = piece
-        if (/[kqrnbp]/.test(dest)) captured.white += dest
-        if (/[KQRNBP]/.test(dest)) captured.black += dest
-        if (piece === 'K') castling.white = { left: false, right: false }
-        if (piece === 'k') castling.black = { left: false, right: false }
-        if (from.row === 7 && from.col === 0) castling.white.left = false
-        if (from.row === 7 && from.col === 7) castling.white.right = false
-        if (from.row === 0 && from.col === 0) castling.black.left = false
-        if (from.row === 0 && from.col === 7) castling.black.right = false
-        if (piece === 'P' && to.row - from.row === -2)
-          enPassant = { white: { row: -1, col: -1 }, black: { row: to.row - 1, col: to.col } }
-        else if (piece === 'p' && to.row - from.row === 2)
-          enPassant = { white: { row: to.row + 1, col: to.col }, black: { row: -1, col: -1 } }
-        else enPassant = { white: { row: -1, col: -1 }, black: { row: -1, col: -1 } }
-        if (dest === 'k') setGameState('w')
-        else if (dest === 'K') setGameState('b')
-        return true
-      } else {
+      if (!validateMove(player, from, to)) {
         if (player === 'w') setGameState('b')
         else setGameState('w')
         return false
       }
+      let piece = board[from.row][from.col]
+      board[from.row][from.col] = ' '
+      let dest = board[to.row][to.col]
+      board[to.row][to.col] = piece
+      if (/[kqrnbp]/.test(dest)) captured.white += dest
+      if (/[KQRNBP]/.test(dest)) captured.black += dest
+      if (piece === 'K') castling.white = { left: false, right: false }
+      if (piece === 'k') castling.black = { left: false, right: false }
+      if (from.row === 7 && from.col === 0) castling.white.left = false
+      if (from.row === 7 && from.col === 7) castling.white.right = false
+      if (from.row === 0 && from.col === 0) castling.black.left = false
+      if (from.row === 0 && from.col === 7) castling.black.right = false
+      if (piece === 'P' && to.row - from.row === -2)
+        enPassant = { white: { row: -1, col: -1 }, black: { row: to.row - 1, col: to.col } }
+      else if (piece === 'p' && to.row - from.row === 2)
+        enPassant = { white: { row: to.row + 1, col: to.col }, black: { row: -1, col: -1 } }
+      else enPassant = { white: { row: -1, col: -1 }, black: { row: -1, col: -1 } }
+      if (dest === 'k') setGameState('w')
+      else if (dest === 'K') setGameState('b')
+      return true
     },
     addPlayer: (player) => {
       if (gameState !== '0 joint' && gameState !== '1 joint')

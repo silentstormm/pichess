@@ -72,23 +72,26 @@ wss.on('connection', function connection(ws) {
     const oMsg = JSON.parse(message.toString())
 
     const gameObj = websockets[con.id]
-    const player = gameObj.determinePlayer(con.id)
+    const player = gameObj.determinePlayer(con)
 
-    if (oMsg.type == messages.T_MOVE) {
+    console.log(`message ${JSON.stringify(oMsg.type)} received`)
+
+    if (oMsg.type === messages.T_MOVE) {
+      console.log(`player ${player} moved: ${JSON.stringify(oMsg.data)}`)
       if (gameObj.move(player, oMsg.data.from, oMsg.data.to))
-        player === 'w' ? gameObj.getplayerB().send(message) : gameObj.getplayerW().send(message)
+        player === 'w' ? gameObj.getPlayerB().send(message.toString()) : gameObj.getPlayerW().send(message.toString())
       if (/[wbd]/.test(gameObj.getGameState())) {
         let endMessage = messages.O_GAME_OVER
         endMessage.data = gameObj.getGameState()
-        gameObj.getplayerW().send(JSON.stringify(endMessage))
-        gameObj.getplayerB().send(JSON.stringify(endMessage))
+        gameObj.getPlayerW().send(JSON.stringify(endMessage))
+        gameObj.getPlayerB().send(JSON.stringify(endMessage))
       }
     }
 
-    if (oMsg.type == messages.T_GAME_OVER) {
+    if (oMsg.type === messages.T_GAME_OVER) {
       gameObj.setGameState(oMsg.data)
-      gameObj.getplayerW().send(message)
-      gameObj.getplayerB().send(message)
+      gameObj.getPlayerW().send(message)
+      gameObj.getPlayerB().send(message)
       //game was won by somebody, update statistics
       gameStatus.gamesCompleted++
     }
@@ -101,13 +104,14 @@ wss.on('connection', function connection(ws) {
      */
     console.log(`${con.id} disconnected ...`)
 
-    if (code == 1001) {
+    if (code === 1001) {
       /*
        * if possible, abort the game; if not, the game is already completed
        */
       const gameObj = websockets[con.id]
 
-      gameObj.setGameState(gameObj.determinePlayer() === 'w' ? 'b' : 'w')
+      console.log(websockets)
+      gameObj.setGameState(gameObj.determinePlayer(con) === 'w' ? 'b' : 'w')
       gameStatus.gamesAborted++
 
       /*
@@ -115,18 +119,20 @@ wss.on('connection', function connection(ws) {
        * close it
        */
       try {
-        gameObj.getplayerW().close()
+        gameObj.getPlayerW().close()
         gameObj.setPlayerW(null)
       } catch (e) {
         console.log('Player W closing: ' + e)
       }
 
       try {
-        gameObj.getplayerB().close()
+        gameObj.getPlayerB().close()
         gameObj.setPlayerB(null)
       } catch (e) {
         console.log('Player B closing: ' + e)
       }
+
+      delete websockets[con.id]
     }
   })
 })
