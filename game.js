@@ -121,6 +121,8 @@ function gameConstructor(gameID) {
   }
 
   return {
+    getGameState: () => gameState,
+    setGameState: (status) => (gameState = status),
     move: (player, from, to) => {
       if (validateMove(player, from, to)) {
         let piece = board[from.row][from.col]
@@ -140,17 +142,14 @@ function gameConstructor(gameID) {
         else if (piece === 'p' && to.row - from.row === 2)
           enPassant = { white: { row: to.row + 1, col: to.col }, black: { row: -1, col: -1 } }
         else enPassant = { white: { row: -1, col: -1 }, black: { row: -1, col: -1 } }
-        if (dest === 'k') endGame('w')
-        else if (dest === 'K') endGame('b')
+        if (dest === 'k') setGameState('w')
+        else if (dest === 'K') setGameState('b')
         return true
       } else {
-        if (player === 'w') endGame('b')
-        else endGame('w')
+        if (player === 'w') setGameState('b')
+        else setGameState('w')
         return false
       }
-    },
-    endGame: (winner) => {
-      gameState = winner
     },
     addPlayer: (player) => {
       if (gameState !== '0 joint' && gameState !== '1 joint')
@@ -176,8 +175,6 @@ function gameConstructor(gameID) {
     getPlayerB: () => playerB,
     setPlayerW: (player) => (playerW = player),
     setPlayerB: (player) => (playerB = player),
-    getGameState: () => gameState,
-    setGameState: (status) => (gameState = status),
   }
 }
 

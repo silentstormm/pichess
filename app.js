@@ -107,7 +107,7 @@ wss.on('connection', function connection(ws) {
        */
       const gameObj = websockets[con.id]
 
-      gameObj.endGame(gameObj.determinePlayer() === 'w' ? 'b' : 'w')
+      gameObj.setGameState(gameObj.determinePlayer() === 'w' ? 'b' : 'w')
       gameStatus.gamesAborted++
 
       /*
