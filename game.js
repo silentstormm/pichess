@@ -76,8 +76,8 @@ function gameConstructor(gameID) {
         break
       case 'q':
       case 'Q':
-        if (Math.abs(from.row - to.row) !== Math.abs(from.col - to.col)) return false
-        if (from.row !== to.row && from.col !== to.col) return false
+        if (Math.abs(from.row - to.row) !== Math.abs(from.col - to.col) && from.row !== to.row && from.col !== to.col)
+          return false
         if (pieceInWay(from, to)) return false
         break
       case 'r':
