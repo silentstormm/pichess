@@ -45,7 +45,7 @@ wss.on('connection', function connection(ws) {
   /*
    * inform the client about its assigned player type
    */
-  con.send(playerType == 'w' ? messages.S_PLAYER_W : messages.S_PLAYER_B)
+  con.send(playerType == 'w' ? JSON.stringify(messages.O_PLAYER_W) : JSON.stringify(messages.O_PLAYER_B))
 
   /*
    * once we have two players, there is no way back;
