@@ -22,15 +22,6 @@ const wss = new websocket.Server({ server })
 
 const websockets = {}
 
-setInterval(function () {
-  for (let i in websockets) {
-    //if the websockets[i] has a final status, the game is complete/aborted
-    if (/[wbd]/.test(websockets[i].gameState)) {
-      delete websockets[i]
-    }
-  }
-}, 50000)
-
 let currentGame = Game(gameStatus.gamesInitialized++)
 let connectionID = 0
 
