@@ -10,6 +10,12 @@
   box-sizing: border-box;
 }
 
+@media (resolution: 120dpi) {
+  html {
+    font-size: 80%;
+  }
+}
+
 body {
   width: 100vw;
   height: 100vh;
@@ -37,6 +43,10 @@ button {
   overflow: hidden;
 }
 
+a {
+  text-decoration: none;
+}
+
 .glass {
   background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 8px 32px 0 rgba(77, 113, 205, 0.37);
@@ -58,7 +68,6 @@ nav {
 
 .logo {
   color: #fff;
-  text-decoration: none;
   font-size: 2rem;
 }
 
@@ -163,6 +172,7 @@ nav {
   transition: left 0.5s, width 0.5s;
   white-space: nowrap;
   left: 0;
+  text-decoration: none !important;
 }
 
 .slide-hover:hover .button-icon {

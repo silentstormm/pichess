@@ -11,6 +11,14 @@
   align-items: flex-end;
 }
 
+@media (resolution: 120dpi) {
+  .menu {
+    height: 300px;
+    width: 450px;
+    margin: -150px -225px;
+  }
+}
+
 .menu *:not(.fas) {
   color: #070853;
 }
