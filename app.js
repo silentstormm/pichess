@@ -3,7 +3,7 @@ const http = require('http')
 const websocket = require('ws')
 
 const indexRouter = require('./routes/index')
-const messages = require('./public/javascripts/messages')
+const messages = require('./public/js/messages')
 
 const gameStatus = require('./statTracker')
 const Game = require('./game')
@@ -11,6 +11,7 @@ const Game = require('./game')
 const port = process.argv[2]
 const app = express()
 
+app.set('view engine', 'ejs')
 app.use(express.static(__dirname + '/public'))
 
 app.get('/play', indexRouter)
