@@ -11,16 +11,16 @@
   </head>
   <body>
     <nav>
-      <a class="logo" href="/">Chess game thing app</a>
+      <a class="logo" href="/">chess game thing app</a>
     </nav>
-    <div class="main">
+    <div class="main" id="main">
       <div class="game">
         <div class="player-info p1">
           <div class="info-left glass">
             <div class="name">P1</div>
             <div class="pieces"></div>
           </div>
-          <div class="clock glass">21:37</div>
+          <div class="clock glass" id="clock">21:37</div>
         </div>
 
         <div class="board">
@@ -102,35 +102,48 @@
             <div class="name">P2</div>
             <div class="pieces"></div>
           </div>
-          <div class="clock glass">4:20</div>
+          <div class="clock glass" id="dem-moves">4:20</div>
         </div>
       </div>
 
       <div class="end-buttons">
-        <button class="abort glass split slide-hover">
-          <!-- <div class="button-icon">
-            <i class="fas fa-flag"></i>
-          </div> -->
-          <div class="button-icon flag-icon">
-            <i class="fas fa-flag"></i>
-          </div>
-          <div class="button-text">Surrender</div>
-        </button>
-        <button class="draw glass split slide-hover">
+        <a href="/">
+          <button class="abort glass split slide-hover">
+            <!-- <div class="button-icon">
+              <i class="fas fa-flag"></i>
+            </div> -->
+            <div class="button-icon flag-icon">
+              <i class="fas fa-flag"></i>
+            </div>
+            <div class="button-text">just give up</div>
+          </button>
+        </a>
+        <!-- <button class="draw glass split slide-hover">
           <div class="button-icon bold">½</div>
           <div class="button-text">Offer draw</div>
-        </button>
+        </button> -->
       </div>
     </div>
 
-    <button class="help-toggle glass split slide-hover">
+    <button class="help-toggle glass split slide-hover" id="help-toggle">
       <div class="button-icon">
         <i class="fas fa-question-circle"></i>
       </div>
-      <div class="button-text">How to play</div>
+      <div class="button-text">how</div>
     </button>
 
-    <div class="help glass"></div>
+    <div class="help glass" id="help">
+      play chess but take king <br />
+      also no castling <br />
+      or promotion <br />
+      or en passant ;(
+    </div>
+
+    <div class="end-overlay"></div>
+    <div class="win glass" id="win-light">you won</div>
+    <div class="win glass" id="win-dark">congrats i guess</div>
+    <div class="lose glass" id="lose-light">you did miserably</div>
+    <div class="lose glass" id="lose-dark">at least that game is finally over</div>
 
     <!-- <svg role="none">
       <mask id="flag" maskContentUnits="objectBoundingBox" maskUnits="objectBoundingBox">
@@ -161,6 +174,8 @@
         ></path>
       </mask>
     </svg> -->
+
+    <script src="js/help.js"></script>
 
     <script src="js/config.js"></script>
     <script src="js/messages.js"></script>

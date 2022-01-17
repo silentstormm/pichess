@@ -6,7 +6,7 @@ function gameConstructor(gameID) {
   let playerB = null
   let id = gameID
   let time = { white: 600, black: 600 }
-  let castling = { white: { left: true, right: true }, white: { left: true, right: true } }
+  let castling = { white: { left: true, right: true }, black: { left: true, right: true } }
   let enPassant = { white: { row: -1, col: -1 }, black: { row: -1, col: -1 } }
   let gameState = '0 joint'
   let captured = { white: '', black: '' }

@@ -11,7 +11,7 @@
   </head>
   <body>
     <nav>
-      <a class="logo" href="/">Chess game thing app</a>
+      <a class="logo" href="/">chess game thing app</a>
     </nav>
     <div class="board-wrapper">
       <div class="board">
@@ -114,11 +114,21 @@
         </div>
       </div>
     </div>
-    <button class="help-toggle glass split slide-hover">
+
+    <button class="help-toggle glass split slide-hover" id="help-toggle">
       <div class="button-icon">
         <i class="fas fa-question-circle"></i>
       </div>
       <div class="button-text">How to play</div>
     </button>
+
+    <div class="help glass" id="help">
+      play chess but take king <br />
+      also no castling <br />
+      or promotion <br />
+      or en passant ;(
+    </div>
+
+    <script src="js/help.js"></script>
   </body>
 </html>

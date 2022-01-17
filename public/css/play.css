@@ -57,3 +57,41 @@
   content: '\f111';
   font-size: 8vh;
 }
+
+.end-overlay {
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  pointer-events: none;
+  /* display: none; */
+}
+
+.win {
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 200px;
+  margin-top: -100px;
+  margin-left: -250px;
+  z-index: 1000;
+  color: #000;
+  text-align: center;
+  line-height: 200px;
+}
+
+.lose {
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 200px;
+  margin-top: -100px;
+  margin-left: -250px;
+  z-index: 1000;
+  color: #000;
+  text-align: center;
+  line-height: 200px;
+}

@@ -2,6 +2,9 @@ const Board = (gs) => {
   let gameState = gs
   let clicked = [-1, -1]
   let squares = []
+  let currentPlayer = 'light'
+  let time = 0
+  let moves = 0
 
   function clearGuides() {
     squares.forEach((row) => {
@@ -12,7 +15,15 @@ const Board = (gs) => {
   }
 
   return {
-    init: () => {
+    innit: () => {
+      document.getElementById('dem-moves').innerHTML = `moves: ${moves}`
+      let clock = document.getElementById('clock')
+      setInterval(() => {
+        clock.innerHTML = `time: ${Math.floor(time / 60)}:${time % 60}`
+        time++
+        // console.log('work')
+      }, 1000)
+
       Array.from(document.getElementsByClassName('square')).forEach((square, i) => {
         if (i % 8 === 0) squares[Math.floor(i / 8)] = []
         squares[Math.floor(i / 8)].push(square)
@@ -43,15 +54,19 @@ const Board = (gs) => {
       squares[7][2].classList.add('piece-bishop')
       squares[7][5].classList.add('piece-bishop')
 
-      squares[0][3].classList.add('piece-queen')
-      squares[7][3].classList.add('piece-queen')
+      squares[0][3].classList.add(gameState.getColour() === 'light' ? 'piece-queen' : 'piece-king')
+      squares[7][3].classList.add(gameState.getColour() === 'light' ? 'piece-queen' : 'piece-king')
 
-      squares[0][4].classList.add('piece-king')
-      squares[7][4].classList.add('piece-king')
+      squares[0][4].classList.add(gameState.getColour() === 'light' ? 'piece-king' : 'piece-queen')
+      squares[7][4].classList.add(gameState.getColour() === 'light' ? 'piece-king' : 'piece-queen')
 
       squares.forEach((row, i) => {
         row.forEach((square, j) => {
           square.addEventListener('click', () => {
+            if (currentPlayer === (gameState.getColour() === 'light' ? 'dark' : 'light')) {
+              return
+            }
+
             if (
               clicked[0] >= 0 &&
               clicked[0] < 8 &&
@@ -61,7 +76,13 @@ const Board = (gs) => {
             ) {
               clearGuides()
               let piece = Array.from(squares[clicked[0]][clicked[1]].classList).find((s) => /piece-[kqrnbp]/.test(s))
+              let captured = Array.from(squares[i][j].classList).find((s) => /piece-[kqrnbp]/.test(s))
 
+              squares[i][j].classList.remove(
+                'piece',
+                `piece-${gameState.getColour() === 'light' ? 'dark' : 'light'}`,
+                captured
+              )
               squares[clicked[0]][clicked[1]].classList.remove('piece', `piece-${gameState.getColour()}`, piece)
               squares[i][j].classList.add('piece', `piece-${gameState.getColour()}`, piece)
 
@@ -76,6 +97,9 @@ const Board = (gs) => {
                       to: { row: 7 - i, col: 7 - j },
                     }
               )
+              document.getElementById('dem-moves').innerHTML = `moves: ${++moves}`
+
+              currentPlayer = gameState.getColour() === 'light' ? 'dark' : 'light'
               return
             }
 
@@ -126,6 +150,11 @@ const Board = (gs) => {
                         )
                           break
                         squares[i + k * dy][j + k * dx].classList.add('can-move')
+                        if (
+                          Array.from(squares[i + k * dy][j + k * dx].classList).find((s) => /piece-[ld]/.test(s)) ===
+                          `piece-${gameState.getColour() === 'light' ? 'dark' : 'light'}`
+                        )
+                          break
                       }
                     }
                   }
@@ -142,6 +171,11 @@ const Board = (gs) => {
                       )
                         break
                       squares[i + k * dy][j].classList.add('can-move')
+                      if (
+                        Array.from(squares[i + k * dy][j].classList).find((s) => /piece-[ld]/.test(s)) ===
+                        `piece-${gameState.getColour() === 'light' ? 'dark' : 'light'}`
+                      )
+                        break
                     }
                   }
                 }
@@ -155,6 +189,11 @@ const Board = (gs) => {
                       )
                         break
                       squares[i][j + k * dx].classList.add('can-move')
+                      if (
+                        Array.from(squares[i][j + k * dx].classList).find((s) => /piece-[ld]/.test(s)) ===
+                        `piece-${gameState.getColour() === 'light' ? 'dark' : 'light'}`
+                      )
+                        break
                     }
                   }
                 }
@@ -211,6 +250,11 @@ const Board = (gs) => {
                         )
                           break
                         squares[i + k * dy][j + k * dx].classList.add('can-move')
+                        if (
+                          Array.from(squares[i + k * dy][j + k * dx].classList).find((s) => /piece-[ld]/.test(s)) ===
+                          `piece-${gameState.getColour() === 'light' ? 'dark' : 'light'}`
+                        )
+                          break
                       }
                     }
                   }
@@ -221,9 +265,39 @@ const Board = (gs) => {
                 if (
                   i - 1 >= 0 &&
                   Array.from(squares[i - 1][j].classList).find((s) => /piece-[ld]/.test(s)) !==
-                    `piece-${gameState.getColour()}`
+                    `piece-${gameState.getColour()}` &&
+                  Array.from(squares[i - 1][j].classList).find((s) => /piece-[ld]/.test(s)) !==
+                    `piece-${gameState.getColour() === 'light' ? 'dark' : 'light'}`
                 ) {
                   squares[i - 1][j].classList.add('can-move')
+                }
+
+                if (
+                  i == 6 &&
+                  Array.from(squares[i - 1][j].classList).find((s) => /piece-[ld]/.test(s)) !==
+                    `piece-${gameState.getColour()}` &&
+                  Array.from(squares[i - 2][j].classList).find((s) => /piece-[ld]/.test(s)) !==
+                    `piece-${gameState.getColour()}`
+                ) {
+                  squares[i - 2][j].classList.add('can-move')
+                }
+
+                if (
+                  i - 1 >= 0 &&
+                  j - 1 >= 0 &&
+                  Array.from(squares[i - 1][j - 1].classList).find((s) => /piece-[ld]/.test(s)) ===
+                    `piece-${gameState.getColour() === 'light' ? 'dark' : 'light'}`
+                ) {
+                  squares[i - 1][j - 1].classList.add('can-move')
+                }
+
+                if (
+                  i - 1 >= 0 &&
+                  j + 1 < 8 &&
+                  Array.from(squares[i - 1][j + 1].classList).find((s) => /piece-[ld]/.test(s)) ===
+                    `piece-${gameState.getColour() === 'light' ? 'dark' : 'light'}`
+                ) {
+                  squares[i - 1][j + 1].classList.add('can-move')
                 }
                 break
 
@@ -233,6 +307,36 @@ const Board = (gs) => {
           })
         })
       })
+    },
+    moveOpponent: ({ from, to }) => {
+      if (gameState.getColour() === 'dark') {
+        from = { row: 7 - from.row, col: 7 - from.col }
+        to = { row: 7 - to.row, col: 7 - to.col }
+      }
+
+      let piece = Array.from(squares[from.row][from.col].classList).find((s) => /piece-[kqrnbp]/.test(s))
+      let captured = Array.from(squares[to.row][to.col].classList).find((s) => /piece-[kqrnbp]/.test(s))
+
+      squares[to.row][to.col].classList.remove('piece', `piece-${gameState.getColour()}`, captured)
+      squares[from.row][from.col].classList.remove(
+        'piece',
+        `piece-${gameState.getColour() === 'light' ? 'dark' : 'light'}`,
+        piece
+      )
+      squares[to.row][to.col].classList.add(
+        'piece',
+        `piece-${gameState.getColour() === 'light' ? 'dark' : 'light'}`,
+        piece
+      )
+      document.getElementById('dem-moves').innerHTML = `moves: ${++moves}`
+
+      currentPlayer = gameState.getColour()
+    },
+    die: (player) => {
+      document.getElementById('main').style.pointerEvents = 'none'
+      if (gameState.getColour() === player)
+        document.getElementById(`lose-${gameState.getColour()}`).style.display = 'block'
+      else document.getElementById(`win-${gameState.getColour()}`).style.display = 'block'
     },
   }
 }

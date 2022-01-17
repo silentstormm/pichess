@@ -4,6 +4,7 @@ let GameState = (ws) => {
   let castling = { left: true, right: true }
   let enPassant = { row: -1, col: -1 }
   let colour = null
+  let end = false
 
   return {
     setPhase: (p) => (phase = p),
@@ -21,6 +22,8 @@ let GameState = (ws) => {
       msg.data = m
       ws.send(JSON.stringify(msg))
     },
+    beEnd: () => (end = true),
+    isEnd: () => end,
   }
 }
 
@@ -39,14 +42,18 @@ let GameState = (ws) => {
         break
 
       case Messages.T_GAME_START:
-        board.init()
+        board.innit()
         break
 
       case Messages.T_MOVE:
+        board.moveOpponent(msg.data)
         break
 
       case Messages.T_GAME_OVER:
-        console.log(msg.data)
+        if (gameState.isEnd()) break
+        board.die(msg.data === 'w' ? 'dark' : 'light')
+        console.log(`player ${msg.data} won`)
+        gameState.beEnd()
         break
 
       default:

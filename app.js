@@ -102,26 +102,38 @@ wss.on('connection', function connection(ws) {
        */
       const gameObj = websockets[con.id]
 
+      if (gameObj === null) return
+
       console.log(websockets)
-      gameObj.setGameState(gameObj.determinePlayer(con) === 'w' ? 'b' : 'w')
-      gameStatus.gamesAborted++
+      if (!/[wbd]/.test(gameObj.getGameState())) {
+        gameObj.setGameState(gameObj.determinePlayer(con) === 'w' ? 'b' : 'w')
+        gameStatus.gamesAborted++
+      }
 
       /*
        * determine whose connection remains open;
        * close it
        */
       try {
+        let msg = messages.O_GAME_OVER
+        msg.data = 'w'
+        gameObj.getPlayerW().send(JSON.stringify(msg))
         gameObj.getPlayerW().close()
         gameObj.setPlayerW(null)
+        console.log('Player W closed')
       } catch (e) {
-        console.log('Player W closing: ' + e)
+        console.log("Player W didn't close: " + e)
       }
 
       try {
+        let msg = messages.O_GAME_OVER
+        msg.data = 'b'
+        gameObj.getPlayerB().send(JSON.stringify(msg))
         gameObj.getPlayerB().close()
         gameObj.setPlayerB(null)
+        console.log('Player B closed')
       } catch (e) {
-        console.log('Player B closing: ' + e)
+        console.log("Player B didn't close: " + e)
       }
 
       delete websockets[con.id]
