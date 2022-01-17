@@ -74,6 +74,7 @@ wss.on('connection', function connection(ws) {
       if (/[wbd]/.test(gameObj.getGameState())) {
         let endMessage = messages.O_GAME_OVER
         endMessage.data = gameObj.getGameState()
+        gameStatus.gamesCompleted++
         gameObj.getPlayerW().send(JSON.stringify(endMessage))
         gameObj.getPlayerB().send(JSON.stringify(endMessage))
       }
@@ -84,7 +85,7 @@ wss.on('connection', function connection(ws) {
       gameObj.getPlayerW().send(message)
       gameObj.getPlayerB().send(message)
       //game was won by somebody, update statistics
-      gameStatus.gamesCompleted++
+      gameStatus.gamesAborted++
     }
   })
 
