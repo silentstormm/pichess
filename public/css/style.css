@@ -16,6 +16,17 @@
   }
 }
 
+@font-face {
+  font-family: Futura;
+  src: url('../fonts/FuturaPTBook.otf');
+}
+
+@font-face {
+  font-family: Futura;
+  src: url('../fonts/FuturaPTDemi.otf');
+  font-weight: 600;
+}
+
 body {
   width: 100vw;
   height: 100vh;
@@ -26,14 +37,14 @@ body {
   color: #ffffff;
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
-  font-family: 'Futura';
+  font-family: Futura;
   font-size: 1.5rem;
 }
 
 body,
 input,
 button {
-  font-family: 'Futura';
+  font-family: Futura;
   color: #ffffff;
 }
 
@@ -214,7 +225,28 @@ nav {
   z-index: 1000;
   color: #000;
   text-align: center;
+  line-height: 50px;
+}
+
+.smol {
+  position: absolute;
+  /* display: none; */
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 200px;
+  margin-top: -100px;
+  margin-left: -250px;
+  z-index: 1000;
+  color: #000;
+  text-align: center;
   line-height: 200px;
+}
+
+@media (min-width: 800px) and (min-height: 400px) {
+  .smol {
+    display: none;
+  }
 }
 
 .bold {
