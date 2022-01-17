@@ -2,7 +2,7 @@
   /*
    * Server to client: set as player W
    */
-  exports.T_PLAYER_TYPE = 'PLAYER-TYPE'
+  exports.T_PLAYER_TYPE = 'PLAYER_TYPE'
   exports.O_PLAYER_W = {
     type: exports.T_PLAYER_TYPE,
     data: 'w',
